@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindBack – College Lost & Found Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1426;
+    --navy2: #152037;
+    --blue: #1A56DB;
+    --blue-light: #EBF3FF;
+    --amber: #F59E0B;
+    --amber-light: #FEF9EC;
+    --green: #059669;
+    --green-light: #ECFDF5;
+    --text: #0B1426;
+    --muted: #5A6A85;
+    --border: #E2E8F4;
+    --white: #FFFFFF;
+    --bg: #F7F9FC;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 5%;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-cta {
+    display: flex; gap: 0.75rem; align-items: center;
+  }
+  .btn-outline {
+    padding: 0.5rem 1.25rem;
+    border: 1.5px solid var(--navy);
+    border-radius: 100px;
+    background: transparent; color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; font-weight: 500;
+    cursor: pointer; transition: all .2s;
+    text-decoration: none;
+  }
+  .btn-outline:hover { background: var(--navy); color: #fff; }
+  .btn-solid {
+    padding: 0.5rem 1.25rem;
+    border: none; border-radius: 100px;
+    background: var(--blue); color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; font-weight: 500;
+    cursor: pointer; transition: all .2s;
+    text-decoration: none;
+  }
+  .btn-solid:hover { background: #1344c4; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    padding: 7rem 5% 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    background: linear-gradient(135deg, #F0F5FF 0%, #FAFBFF 50%, #FFF9F0 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,86,219,0.07) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.35rem 1rem;
+    background: var(--blue-light);
+    border: 1px solid rgba(26,86,219,0.2);
+    border-radius: 100px;
+    color: var(--blue);
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: var(--navy);
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--blue);
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 500px;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .btn-hero-primary {
+    padding: 0.875rem 2rem;
+    background: var(--navy); color: #fff;
+    border: none; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: all .25s;
+    text-decoration: none;
+  }
+  .btn-hero-primary:hover { background: #1A2A44; transform: translateY(-2px); }
+  .btn-hero-secondary {
+    padding: 0.875rem 2rem;
+    background: var(--amber); color: var(--navy);
+    border: none; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: all .25s;
+    text-decoration: none;
+  }
+  .btn-hero-secondary:hover { background: #D97706; transform: translateY(-2px); }
+  .hero-stats {
+    display: flex; gap: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .phone-mockup {
+    width: 300px;
+    background: var(--white);
+    border-radius: 32px;
+    border: 8px solid var(--navy);
+    box-shadow: 0 32px 80px rgba(11,20,38,0.25);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+  .phone-header {
+    background: var(--navy);
+    padding: 1rem 1.25rem 0.75rem;
+  }
+  .phone-header-title {
+    font-family: 'Fraunces', serif;
+    color: #fff; font-size: 1rem; font-weight: 700;
+  }
+  .phone-header-sub { color: rgba(255,255,255,0.5); font-size: 0.7rem; margin-top: 2px; }
+  .phone-search {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 0.4rem 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .phone-search span { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+  .phone-body { padding: 1rem; }
+  .phone-card {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    display: flex; gap: 0.75rem; align-items: flex-start;
+  }
+  .phone-card-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .icon-lost { background: #FEE2E2; }
+  .icon-found { background: #D1FAE5; }
+  .phone-card-title { font-size: 0.75rem; font-weight: 600; color: var(--navy); }
+  .phone-card-sub { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+  .phone-card-tag {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 100px;
+    font-size: 0.6rem; font-weight: 600;
+    margin-top: 4px;
+  }
+  .tag-lost { background: #FEE2E2; color: #991B1B; }
+  .tag-found { background: #D1FAE5; color: #065F46; }
+  .floating-badge {
+    position: absolute;
+    background: #fff;
+    border-radius: 16px;
+    padding: 0.6rem 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 3;
+    font-size: 0.8rem; font-weight: 500;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .badge-1 { top: 20px; right: -40px; }
+  .badge-2 { bottom: 60px; left: -50px; }
+  .badge-dot-green { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .badge-dot-amber { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 5rem 5%; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--muted);
+    max-width: 520px; line-height: 1.7;
+  }
+  .text-center { text-align: center; margin: 0 auto; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--navy); }
+  .how-section .section-label { color: var(--amber); }
+  .how-section .section-title { color: #fff; }
+  .how-section .section-sub { color: rgba(255,255,255,0.55); }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    position: relative;
+  }
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 2.25rem; left: calc(12.5% + 1rem); right: calc(12.5% + 1rem);
+    height: 1px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 6px, transparent 6px, transparent 14px);
+  }
+  .step-card {
+    text-align: center;
+    padding: 2rem 1.25rem;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform .3s, background .3s;
+  }
+  .step-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.1); }
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--navy);
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .step-title { font-weight: 600; color: #fff; font-size: 1rem; margin-bottom: 0.5rem; }
+  .step-desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* ── SERVICES ── */
+  .services-section { background: var(--bg); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .service-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(11,20,38,0.1); }
+  .service-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .si-blue { background: var(--blue-light); }
+  .si-amber { background: var(--amber-light); }
+  .si-green { background: var(--green-light); }
+  .service-title { font-weight: 600; color: var(--navy); font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .service-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+  .s-tag {
+    padding: 0.2rem 0.7rem;
+    background: var(--bg); border-radius: 100px;
+    font-size: 0.75rem; color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── USP / WHY US ── */
+  .usp-section {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .usp-list { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .usp-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .usp-check {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 50%; background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green); font-size: 1rem; margin-top: 2px;
+  }
+  .usp-item-title { font-weight: 600; color: var(--navy); font-size: 0.95rem; }
+  .usp-item-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-top: 2px; }
+  .usp-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .usp-metric {
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .usp-metric:first-child { grid-column: span 2; background: var(--navy); }
+  .usp-metric-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem; font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .usp-metric:first-child .usp-metric-num { color: var(--amber); font-size: 3rem; }
+  .usp-metric-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+  .usp-metric:first-child .usp-metric-label { color: rgba(255,255,255,0.5); }
+
+  /* ── TESTIMONIALS ── */
+  .testi-section { background: var(--bg); }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .testi-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .testi-card:nth-child(2) { background: var(--navy); border-color: transparent; }
+  .testi-quote { font-size: 2.5rem; line-height: 1; color: var(--blue); font-family: 'Fraunces', serif; margin-bottom: 0.5rem; }
+  .testi-card:nth-child(2) .testi-quote { color: var(--amber); }
+  .testi-text {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+  .testi-card:nth-child(2) .testi-text { color: rgba(255,255,255,0.6); }
+  .testi-author { display: flex; align-items: center; gap: 0.75rem; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .av-blue { background: var(--blue-light); color: var(--blue); }
+  .av-amber { background: var(--amber-light); color: #92400E; }
+  .av-green { background: var(--green-light); color: #065F46; }
+  .testi-name { font-weight: 600; font-size: 0.875rem; color: var(--navy); }
+  .testi-card:nth-child(2) .testi-name { color: #fff; }
+  .testi-role { font-size: 0.75rem; color: var(--muted); }
+  .testi-card:nth-child(2) .testi-role { color: rgba(255,255,255,0.4); }
+  .stars { color: var(--amber); font-size: 0.8rem; margin-bottom: 0.75rem; letter-spacing: 1px; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--navy) 0%, #1A2E5A 100%);
+    text-align: center;
+    padding: 6rem 5%;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { color: #fff; }
+  .cta-section .section-sub { color: rgba(255,255,255,0.55); margin: 0 auto 2.5rem; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-primary {
+    padding: 1rem 2.5rem;
+    background: var(--amber); color: var(--navy);
+    border: none; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all .25s;
+    text-decoration: none;
+  }
+  .btn-cta-primary:hover { background: #D97706; transform: translateY(-3px); }
+  .btn-cta-secondary {
+    padding: 1rem 2.5rem;
+    background: transparent; color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 500;
+    cursor: pointer; transition: all .25s;
+    text-decoration: none;
+  }
+  .btn-cta-secondary:hover { border-color: rgba(255,255,255,0.7); transform: translateY(-3px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 3rem 5% 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: #fff; margin-bottom: 0.75rem;
+  }
+  .footer-logo span { color: var(--amber); }
+  .footer-desc { font-size: 0.85rem; color: rgba(255,255,255,0.4); line-height: 1.7; }
+  .footer-col-title {
+    font-weight: 600; color: #fff;
+    font-size: 0.875rem; margin-bottom: 1rem;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a {
+    font-size: 0.85rem; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color .2s;
+  }
+  .footer-links a:hover { color: rgba(255,255,255,0.8); }
+  .footer-bottom {
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-content > * {
+    animation: fadeUp .6s ease forwards;
+    opacity: 0;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.55s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.7s; }
+  @keyframes floatBadge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .badge-1 { animation: floatBadge 3s ease-in-out infinite; }
+  .badge-2 { animation: floatBadge 3s ease-in-out infinite 1.5s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Find<span>Back</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#services">Features</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn-outline">Log In</a>
+    <a href="#" class="btn-solid">Register Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🎓 Exclusively for College Campuses</div>
+    <h1>Reunite <em>Lost Items</em><br>With Their Owners</h1>
+    <p>FindBack is your campus-wide smart portal to report, find, and claim lost items — powered by AI matching and secure verification.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-hero-primary">📍 Report Lost Item</a>
+      <a href="#" class="btn-hero-secondary">🔍 Browse Found Items</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">2,400+</div>
+        <div class="stat-label">Items Returned</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">86%</div>
+        <div class="stat-label">Recovery Rate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5,000+</div>
+        <div class="stat-label">Registered Students</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="phone-mockup">
+      <div class="phone-header">
+        <div class="phone-header-title">FindBack</div>
+        <div class="phone-header-sub">Campus Lost & Found Portal</div>
+        <div class="phone-search">
+          <span>🔍 Search items on campus...</span>
+        </div>
+      </div>
+      <div class="phone-body">
+        <div style="font-size: 0.7rem; font-weight: 600; color: #5A6A85; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Recent Reports</div>
+        <div class="phone-card">
+          <div class="phone-card-icon icon-lost">🎒</div>
+          <div>
+            <div class="phone-card-title">Black Backpack</div>
+            <div class="phone-card-sub">Library, Block B • 2 hrs ago</div>
+            <span class="phone-card-tag tag-lost">Lost</span>
+          </div>
+        </div>
+        <div class="phone-card">
+          <div class="phone-card-icon icon-found">🔑</div>
+          <div>
+            <div class="phone-card-title">Silver Car Keys</div>
+            <div class="phone-card-sub">Cafeteria Entrance • 1 hr ago</div>
+            <span class="phone-card-tag tag-found">Found</span>
+          </div>
+        </div>
+        <div class="phone-card">
+          <div class="phone-card-icon icon-lost">💳</div>
+          <div>
+            <div class="phone-card-title">Student ID Card</div>
+            <div class="phone-card-sub">Sports Ground • 3 hrs ago</div>
+            <span class="phone-card-tag tag-lost">Lost</span>
+          </div>
+        </div>
+        <div style="background: #1A56DB; color: #fff; text-align: center; padding: 0.6rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-top: 0.25rem;">
+          View All 47 Active Reports →
+        </div>
+      </div>
+    </div>
+    <div class="floating-badge badge-1">
+      <div class="badge-dot-green"></div>
+      Match found! 🎉
+    </div>
+    <div class="floating-badge badge-2">
+      <div class="badge-dot-amber"></div>
+      3 items near you
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-label">Process</div>
+  <div class="section-title">How FindBack Works</div>
+  <p class="section-sub">Four simple steps to reunite you with your belongings — or help someone else get theirs back.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-icon">📝</div>
+      <div class="step-title">Report the Item</div>
+      <div class="step-desc">Describe your lost or found item with photos, category, and last known location on campus.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-icon">🤖</div>
+      <div class="step-title">AI Matching</div>
+      <div class="step-desc">Our smart engine scans all active reports and notifies you when a potential match is detected.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-icon">🔐</div>
+      <div class="step-title">Claim & Verify</div>
+      <div class="step-desc">Submit proof of ownership. Our admin verifies via Student ID, OTP, or QR handoff system.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-icon">🎉</div>
+      <div class="step-title">Item Returned!</div>
+      <div class="step-desc">Meet securely on campus to retrieve your item. Earn Good Samaritan points for helping others.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES / FEATURES -->
+<section class="services-section" id="services">
+  <div class="text-center">
+    <div class="section-label">Features</div>
+    <div class="section-title">Everything You Need</div>
+    <p class="section-sub">Built for students, managed by admins — FindBack covers every step of the lost-and-found journey.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon-wrap si-blue">🔍</div>
+      <div class="service-title">Smart Search & Filter</div>
+      <div class="service-desc">Filter by category, location, date, or status. Our AI similarity engine surfaces the most relevant results instantly.</div>
+      <div class="service-tags">
+        <span class="s-tag">Keyword Search</span>
+        <span class="s-tag">Category Filter</span>
+        <span class="s-tag">Location Map</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap si-amber">📸</div>
+      <div class="service-title">Image-Based Matching</div>
+      <div class="service-desc">Upload a photo and let our visual recognition engine find matching items reported by others on campus.</div>
+      <div class="service-tags">
+        <span class="s-tag">Image Upload</span>
+        <span class="s-tag">Visual AI</span>
+        <span class="s-tag">Auto-Tags</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap si-green">💬</div>
+      <div class="service-title">Secure In-App Chat</div>
+      <div class="service-desc">Connect with finders or claimants without sharing personal contact details. Safe, campus-only messaging.</div>
+      <div class="service-tags">
+        <span class="s-tag">Encrypted</span>
+        <span class="s-tag">No Phone Sharing</span>
+        <span class="s-tag">Admin Monitored</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap si-blue">🛡️</div>
+      <div class="service-title">Verified Claim System</div>
+      <div class="service-desc">Multi-step ownership verification using Student ID proof, secret marks, OTP codes, and QR-based handoff.</div>
+      <div class="service-tags">
+        <span class="s-tag">QR Handoff</span>
+        <span class="s-tag">OTP Verify</span>
+        <span class="s-tag">Admin Review</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap si-amber">🔔</div>
+      <div class="service-title">Real-Time Notifications</div>
+      <div class="service-desc">Get instant alerts via email, SMS, or push notification when a match is found, claim approved, or item returned.</div>
+      <div class="service-tags">
+        <span class="s-tag">Email</span>
+        <span class="s-tag">SMS</span>
+        <span class="s-tag">Push Alerts</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap si-green">📊</div>
+      <div class="service-title">Admin Analytics Dashboard</div>
+      <div class="service-desc">Campus admins get full visibility — recovery rates, hotspot maps, top categories, and user activity reports.</div>
+      <div class="service-tags">
+        <span class="s-tag">Recovery Rate</span>
+        <span class="s-tag">Hotspot Maps</span>
+        <span class="s-tag">User Reports</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US (USP) -->
+<section class="usp-section" id="why">
+  <div>
+    <div class="section-label">Why FindBack</div>
+    <div class="section-title">Built Different.<br>Built for Campus.</div>
+    <p class="section-sub">General apps don't understand campus life. FindBack is designed ground-up for college communities.</p>
+    <ul class="usp-list">
+      <li class="usp-item">
+        <div class="usp-check">✓</div>
+        <div>
+          <div class="usp-item-title">College Email Verification</div>
+          <div class="usp-item-desc">Only verified college students and staff can access the platform — keeping it safe and spam-free.</div>
+        </div>
+      </li>
+      <li class="usp-item">
+        <div class="usp-check">✓</div>
+        <div>
+          <div class="usp-item-title">AI Matching Engine</div>
+          <div class="usp-item-desc">No manual searching needed. Our smart system proactively matches lost and found reports for you.</div>
+        </div>
+      </li>
+      <li class="usp-item">
+        <div class="usp-check">✓</div>
+        <div>
+          <div class="usp-item-title">Zero Phone Number Exposure</div>
+          <div class="usp-item-desc">Students communicate through our in-app system — your privacy is fully protected throughout the process.</div>
+        </div>
+      </li>
+      <li class="usp-item">
+        <div class="usp-check">✓</div>
+        <div>
+          <div class="usp-item-title">Gamified Good Samaritan System</div>
+          <div class="usp-item-desc">Earn points and badges for returning items. Build a reputation as a trusted campus helper.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="usp-visual">
+    <div class="usp-metric">
+      <div class="usp-metric-num">86%</div>
+      <div class="usp-metric-label">Average item recovery rate across campuses</div>
+    </div>
+    <div class="usp-metric">
+      <div class="usp-metric-num">< 4hrs</div>
+      <div class="usp-metric-label">Avg. time to match</div>
+    </div>
+    <div class="usp-metric">
+      <div class="usp-metric-num">100%</div>
+      <div class="usp-metric-label">Verified users only</div>
+    </div>
+    <div class="usp-metric">
+      <div class="usp-metric-num">24/7</div>
+      <div class="usp-metric-label">Platform uptime</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="testimonials">
+  <div class="text-center">
+    <div class="section-label">Success Stories</div>
+    <div class="section-title">Students Love FindBack</div>
+    <p class="section-sub">Real stories from students who got their belongings back — thanks to the campus community.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">I lost my laptop bag in the library during exams. Within 2 hours, FindBack matched it with a found report from a senior. Got it back the same evening — everything intact!</div>
+      <div class="testi-author">
+        <div class="testi-avatar av-blue">PR</div>
+        <div>
+          <div class="testi-name">Priya Ramesh</div>
+          <div class="testi-role">3rd Year, Computer Science</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">Found a student ID card near the sports ground. Uploaded it on FindBack and the student came to collect it in under an hour. The QR handoff made it feel super official and safe.</div>
+      <div class="testi-author">
+        <div class="testi-avatar av-amber">AK</div>
+        <div>
+          <div class="testi-name">Arjun Kumar</div>
+          <div class="testi-role">2nd Year, Mechanical Engg.</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">As a hostel warden, FindBack has completely replaced our messy physical log book. Now I can manage all lost-and-found requests online and the analytics save me hours every week.</div>
+      <div class="testi-author">
+        <div class="testi-avatar av-green">SM</div>
+        <div>
+          <div class="testi-name">Dr. Sunita Menon</div>
+          <div class="testi-role">Hostel Warden & Staff Admin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="color: var(--amber);">Get Started Today</div>
+  <div class="section-title">Your Campus Deserves<br>a Smarter System</div>
+  <p class="section-sub">Join thousands of students already using FindBack to keep the campus community connected and honest.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-cta-primary">🎓 Register with College Email</a>
+    <a href="#" class="btn-cta-secondary">Browse Active Reports</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Find<span>Back</span></div>
+      <div class="footer-desc">The smart lost & found portal built exclusively for college campuses. Helping students reconnect with their belongings every day.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#">Browse Items</a></li>
+        <li><a href="#">Report Lost</a></li>
+        <li><a href="#">Report Found</a></li>
+        <li><a href="#">My Dashboard</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Report Abuse</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 FindBack. Built with ❤️ for College Communities.</div>
+    <div class="footer-copy">Made in India 🇮🇳</div>
+  </div>
+</footer>
+
+</body>
+</html>
